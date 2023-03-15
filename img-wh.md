@@ -6,7 +6,7 @@ theme: vue-pro
 highlight:
 ---
 
-最近做一个需求，上传文件，限制图片的宽高，索性写了个插件。
+最近做一个需求，上传文件，需要获取图片的宽高，索性写了个插件。
 
 ## 用插件的话
 
@@ -15,7 +15,7 @@ highlight:
 import getImgWh from 'get-img-wh';
 
 // file就是原生的file文件
-const { width, height } = await getImageWH(file);
+const { width, height } = await getImgWH(file);
 ```
 
 细致点的例子：
@@ -28,7 +28,7 @@ document.querySelector('#upload').onchange = async (e) => {
   if (!file) {
     return;
   }
-  const { width, height } = await getImageWH(file);
+  const { width, height } = await getImgWH(file);
   console.log(width, height);
 };
 ```
@@ -50,7 +50,7 @@ document.querySelector('#img').onload = function () {
 获取指定路径的图片宽高，就可以通过创建 img 元素来获取
 
 ```js
-const getImageWH_path = (path) => {
+const getImgWH_path = (path) => {
   const image = new Image();
   // 获取的是图片的base64代码
   image.src = path;
@@ -63,7 +63,7 @@ const getImageWH_path = (path) => {
     };
   });
 };
-const { width, height } = await getImageWH_path('...');
+const { width, height } = await getImgWH_path('...');
 ```
 
 ## 源码 2：获取上传文件的宽高
@@ -73,7 +73,7 @@ const { width, height } = await getImageWH_path('...');
 基于上面的原理，借用`FileReader`，将上传的图片转化为 base64，这就作为图片的 src，就可以啦！
 
 ```js
-const getImageWH_file = (file) => {
+const getImgWH_file = (file) => {
   // 定义一个读取文件的对象
   const reader = new FileReader();
   // 读取
@@ -81,7 +81,7 @@ const getImageWH_file = (file) => {
   return new Promise((resolve, reject) => {
     reader.onload = function (event) {
       const base64 = event.target.result;
-      resolve(getImageWH_path(base64));
+      resolve(getImgWH_path(base64));
     };
 
     reader.onerror = function () {
@@ -94,6 +94,6 @@ const getImageWH_file = (file) => {
 ## 源码 3：合并以上
 
 ```js
-const getImageWH = (file) =>
-  typeof file === 'string' ? getImageWH_path(file) : getImageWH_file(file);
+const getImgWH = (file) =>
+  typeof file === 'string' ? getImgWH_path(file) : getImgWH_file(file);
 ```

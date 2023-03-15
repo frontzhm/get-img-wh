@@ -12,7 +12,7 @@ const getImgWH_path = (path) => {
   });
 };
 const getImgWH_file = (file) => {
-  if (file.type.includes('image')) {
+  if (!file.type.includes('image')) {
     console.error('上传的文件非图片，不能获取宽高')
     return
   }
